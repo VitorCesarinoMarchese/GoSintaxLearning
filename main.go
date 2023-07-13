@@ -35,15 +35,40 @@ func main() {
 		fmt.Println("How many tickets you want?")
 		fmt.Scan(&userTickets)
 
-		if int(remainingTickets)-int(userTickets) < 0 {
-			for int(remainingTickets)-int(userTickets) < 0 {
-				if remainingTickets == 1 {
-					fmt.Printf("Sorry but we only have %v ticket\n", remainingTickets)
-				} else {
-					fmt.Printf("Sorry but we only have %v tickets\n", remainingTickets)
-				}
-				fmt.Println("How many tickets you want?")
-				fmt.Scan(&userTickets)
+    var validName bool = len(userFirstName) >= 2 && len(userLastName) >= 2
+    var validEmail bool = strings.Contains(userEmail, "@")
+    var validTickets bool = userTickets > 0 && userTickets <= remainingTickets
+
+		if !validTickets {
+			for !validTickets {
+        if validTickets{
+          break
+        }else{
+				  if remainingTickets == 1 {
+					  fmt.Printf("Sorry but we only have %v ticket\n", remainingTickets)
+				  } else {
+					  fmt.Printf("Sorry but we only have %v tickets\n", remainingTickets)
+				  }
+				  fmt.Println("How many tickets you want?")
+				  fmt.Scan(&userTickets)
+        }
+			}
+		} else if !validName {
+			for !validName{
+				fmt.Println("Sorry but your first name and last name needs to contain more than 2 characters\n")
+		    
+        fmt.Println("What is your first name?")
+		    fmt.Scan(&userFirstName)
+
+		    fmt.Println("What is your last name?")
+		    fmt.Scan(&userLastName)
+      }
+		} else if !validEmail {
+			for remainingTickets < userTickets {
+				fmt.Println("Sorry but your email needs to contain the @ signal\n")
+				
+		    fmt.Println("What is your email?")
+		    fmt.Scan(&userEmail)
 			}
 		}
 
@@ -55,14 +80,13 @@ func main() {
 		} else {
 			fmt.Printf("Thanks %v %v for order %v tickets, we will contact from this email %v\n", userFirstName, userLastName, userTickets, userEmail)
 		}
-		fmt.Printf("We have %v tickets remaing\n", remainingTickets)
-
-		firstNames := []string{}
+		fmt.Printf("We have %v tickets remaing\n", remainingTickets) 
+    fmt.Printf("You are add to the list of bookings, this is the total members %v\n", len(bookings))
+    firstNames := []string{}
 		for _, booking := range bookings {
 			names := strings.Fields(booking)
 			firstNames = append(firstNames, names[0])
 			fmt.Printf("The list of all the members fist names is %v\n", firstNames)
 		}
-		fmt.Printf("You are add to the list of bookings, this is the total members %v\n", len(bookings))
 	}
 }
