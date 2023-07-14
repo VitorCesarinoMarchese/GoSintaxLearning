@@ -4,17 +4,13 @@ import (
 	"fmt"
 	"strings"
 )
-
+var name = "Porra"
+const tickets uint8 = 50
+var remainingTickets uint = 50
+var bookings = []string{}
 func main() {
-	name := "Porra"
-	const tickets uint8 = 50
-	var remainingTickets uint = 50
-	bookings := []string{}
 
-	// fmt.Printf("Tickets is %T, Name is %T /n", tickets, name)
-	fmt.Printf("Welcome to my %v\n", name)
-	fmt.Printf("We have a total of %v tickets and %v are remaining\n", tickets, remainingTickets)
-	fmt.Println("Buy your tickets here TA!")
+	greetUsers()
 
 	for remainingTickets != 0 {
 
@@ -22,6 +18,7 @@ func main() {
 		var userLastName string
 		var userEmail string
 		var userTickets uint
+
 
 		fmt.Println("What is your first name?")
 		fmt.Scan(&userFirstName)
@@ -35,45 +32,10 @@ func main() {
 		fmt.Println("How many tickets you want?")
 		fmt.Scan(&userTickets)
 
-    	validName := len(userFirstName) >= 2 && len(userLastName) >= 2
-    	validEmail := strings.Contains(userEmail, "@")
-    	validTickets := userTickets > 0 && userTickets <= remainingTickets
-
-		if validEmail && validTickets && validName{	
-			remainingTickets -= userTickets
-			bookings = append(bookings, userFirstName+" "+userLastName)
-
-			if userTickets == 1 {
-				fmt.Printf("Thanks %v %v  for order %v ticket, we will contact from this email %v\n", userFirstName, userLastName, userTickets, userEmail)
-			} else {
-				fmt.Printf("Thanks %v %v for order %v tickets, we will contact from this email %v\n", userFirstName, userLastName, userTickets, userEmail)
-			}
-			fmt.Printf("We have %v tickets remaing\n", remainingTickets) 
-		fmt.Printf("You are add to the list of bookings, this is the total members %v\n", len(bookings))
-		firstNames := []string{}
-			for _, booking := range bookings {
-				names := strings.Fields(booking)
-				firstNames = append(firstNames, names[0])
-				fmt.Printf("The list of all the members fist names is %v\n", firstNames)
-			}
-		}else{
-			if !validEmail{
-				fmt.Println("Sorry but yout email must contain @ carachter")
-				fmt.Println("What is your email?")
-				fmt.Scan(&userEmail)
-			}else if !validTickets{
-				if remainingTickets == 1{
-					fmt.Printf("Sorry we only have %v ticket", remainingTickets)
-					fmt.Println("How many tickets you want?")
-					fmt.Scan(&userTickets)
-				}else{
-					fmt.Printf("Sorry we only have %v tickets", remainingTickets)
-					fmt.Println("How many tickets you want?")
-					fmt.Scan(&userTickets)
-				}
-			}else if !validName{
-				fmt.Println("Sorry but your name need to have a minimum of 2 characters")
-
+		if len(userFirstName) < 2 && len(userLastName) < 2{
+			for len(userFirstName) < 2 && len(userLastName) < 2{
+				fmt.Println("Sorry but your first name or last name needs to contain at least 2 characters")
+	
 				fmt.Println("What is your first name?")
 				fmt.Scan(&userFirstName)
 		
@@ -81,5 +43,53 @@ func main() {
 				fmt.Scan(&userLastName)
 			}
 		}
+		if userTickets < 0 || remainingTickets < userTickets{
+			for userTickets < 0 || remainingTickets < userTickets{
+				fmt.Printf("Sorry but we only have %v tickets\n", remainingTickets)
+	
+				fmt.Println("How many tickets you want?")
+				fmt.Scan(&userTickets)
+			}
+	
+		}
+		if !strings.Contains(userEmail, "@"){
+			for !strings.Contains(userEmail, "@"){
+				fmt.Println("Sorry but your email needs to contain a @ symbol")
+	
+				fmt.Println("What is your email?")
+				fmt.Scan(&userEmail)
+			}
+		}
+
+		// fmt.Printf("validName: %v, validEmail: %v, validTickets %v\n", validName, validEmail, validTickets)
+
+		remainingTickets -= userTickets
+		bookings = append(bookings, userFirstName+" "+userLastName)
+
+		thanks(userTickets, userFirstName, userLastName, userEmail)
+		firstName()
 	}
+}
+
+func greetUsers() {
+	fmt.Printf("Welcome to my %v\n", name)
+	fmt.Printf("We have a total of %v tickets and %v are remaining\n", tickets, remainingTickets)
+	fmt.Println("Buy your tickets here TA!")
+}
+func firstName(){
+	firstNames := []string{}
+	for _, booking := range bookings {
+		names := strings.Fields(booking)
+		firstNames = append(firstNames, names[0])
+		fmt.Printf("The list of all the members fist names is %v\n", firstNames)
+	}
+}
+func thanks(userTickets uint, userFirstName string, userLastName string, userEmail string) {
+	if userTickets == 1 {
+		fmt.Printf("Thanks %v %v  for order %v ticket, we will contact from this email %v\n", userFirstName, userLastName, userTickets, userEmail)
+	} else {
+		fmt.Printf("Thanks %v %v for order %v tickets, we will contact from this email %v\n", userFirstName, userLastName, userTickets, userEmail)
+	}
+	fmt.Printf("We have %v tickets remaing\n", remainingTickets)
+	fmt.Printf("You are add to the list of bookings, this is the total members %v\n", len(bookings))
 }
